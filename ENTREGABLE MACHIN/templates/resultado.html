@@ -1,0 +1,282 @@
+{% extends "base.html" %}
+{% block content %}
+
+<style>
+.result-wrap {
+    max-width: 980px;
+    margin: 0 auto;
+    padding: 10px;
+}
+
+.result-hero {
+    background: linear-gradient(135deg, #1d4ed8, #6d28d9);
+    color: white;
+    border-radius: 26px;
+    padding: 34px;
+    margin-bottom: 26px;
+    box-shadow: 0 18px 40px rgba(29, 78, 216, 0.22);
+}
+
+.result-hero span {
+    display: inline-block;
+    background: rgba(255,255,255,.18);
+    padding: 8px 14px;
+    border-radius: 999px;
+    font-size: 13px;
+    font-weight: 700;
+    margin-bottom: 16px;
+}
+
+.result-hero h1 {
+    margin: 0;
+    font-size: 38px;
+    font-weight: 900;
+}
+
+.result-hero p {
+    margin-top: 10px;
+    color: rgba(255,255,255,.82);
+    font-size: 16px;
+}
+
+.result-card-pro {
+    background: white;
+    border: 1px solid #e5e7eb;
+    border-radius: 26px;
+    padding: 32px;
+    box-shadow: 0 18px 45px rgba(15, 23, 42, .08);
+}
+
+.result-top {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+    align-items: center;
+    border-bottom: 1px solid #eef2f7;
+    padding-bottom: 22px;
+    margin-bottom: 26px;
+}
+
+.result-title h2 {
+    margin: 0;
+    font-size: 28px;
+    color: #0f172a;
+}
+
+.result-title p {
+    margin-top: 6px;
+    color: #64748b;
+    font-size: 14px;
+}
+
+.status-pill {
+    padding: 11px 16px;
+    border-radius: 999px;
+    background: #ecfdf5;
+    color: #047857;
+    font-weight: 800;
+    font-size: 13px;
+    border: 1px solid #a7f3d0;
+}
+
+.result-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 18px;
+}
+
+.info-box {
+    background: #f8fafc;
+    border: 1px solid #e5e7eb;
+    border-radius: 18px;
+    padding: 18px;
+}
+
+.info-box small {
+    display: block;
+    color: #64748b;
+    font-size: 12px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: .05em;
+    margin-bottom: 8px;
+}
+
+.info-box strong {
+    color: #111827;
+    font-size: 17px;
+}
+
+.priority-box {
+    grid-column: 1 / -1;
+    background: linear-gradient(135deg, #f8fafc, #eff6ff);
+    border: 1px solid #dbeafe;
+    border-radius: 20px;
+    padding: 22px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.priority-box div small {
+    display: block;
+    color: #64748b;
+    font-size: 12px;
+    font-weight: 800;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+}
+
+.priority {
+    padding: 10px 16px;
+    border-radius: 999px;
+    font-weight: 900;
+    font-size: 13px;
+}
+
+.critica {
+    background: #fee2e2;
+    color: #991b1b;
+}
+
+.alta {
+    background: #ffedd5;
+    color: #9a3412;
+}
+
+.media {
+    background: #fef9c3;
+    color: #854d0e;
+}
+
+.baja {
+    background: #dcfce7;
+    color: #166534;
+}
+
+.result-actions {
+    margin-top: 28px;
+    display: flex;
+    gap: 14px;
+    flex-wrap: wrap;
+}
+
+.btn-pro {
+    padding: 14px 20px;
+    border-radius: 14px;
+    text-decoration: none;
+    font-weight: 800;
+    transition: .2s;
+}
+
+.btn-pro.primary {
+    background: #2563eb;
+    color: white;
+    box-shadow: 0 10px 24px rgba(37,99,235,.24);
+}
+
+.btn-pro.secondary {
+    background: white;
+    color: #1d4ed8;
+    border: 1px solid #dbeafe;
+}
+
+.btn-pro:hover {
+    transform: translateY(-2px);
+}
+
+@media(max-width: 700px) {
+    .result-top,
+    .priority-box {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .result-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .result-hero h1 {
+        font-size: 30px;
+    }
+}
+</style>
+
+<div class="result-wrap">
+
+    <div class="result-hero">
+        <span>Trámite registrado correctamente</span>
+        <h1>Solicitud procesada con éxito</h1>
+        <p>
+            El sistema inteligente clasificó automáticamente la prioridad del trámite
+            usando el modelo de Machine Learning.
+        </p>
+    </div>
+
+    <div class="result-card-pro">
+
+        <div class="result-top">
+            <div class="result-title">
+                <h2>Solicitud N.º {{ tramite.id }}</h2>
+                <p>Resumen general del trámite registrado en la plataforma.</p>
+            </div>
+
+            <div class="status-pill">
+                {{ tramite.estado }}
+            </div>
+        </div>
+
+        <div class="result-grid">
+
+            <div class="info-box">
+                <small>Ciudadano</small>
+                <strong>{{ tramite.ciudadano }}</strong>
+            </div>
+
+            <div class="info-box">
+                <small>Tipo de trámite</small>
+                <strong>{{ tramite.tipo_tramite }}</strong>
+            </div>
+
+            <div class="info-box">
+                <small>Área responsable</small>
+                <strong>{{ tramite.area }}</strong>
+            </div>
+
+            <div class="info-box">
+                <small>Estado actual</small>
+                <strong>{{ tramite.estado }}</strong>
+            </div>
+
+            <div class="priority-box">
+                <div>
+                    <small>Prioridad asignada por IA</small>
+                    <strong>Clasificación automática del sistema</strong>
+                </div>
+
+                <span class="priority {{ tramite.prioridad }}">
+                    {{ tramite.prioridad.upper() }}
+                </span>
+            </div>
+
+        </div>
+
+        <div class="result-actions">
+            <a class="btn-pro primary" href="/notificaciones/{{ tramite.id }}">
+                Ver notificaciones
+            </a>
+
+            <a class="btn-pro secondary" href="/registrar">
+                Registrar otro trámite
+            </a>
+
+            <a class="btn-pro secondary" href="/admin">
+                Ir al panel administrativo
+            </a>
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

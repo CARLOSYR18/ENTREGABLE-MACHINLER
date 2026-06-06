@@ -1,0 +1,227 @@
+{% extends "base.html" %}
+{% block content %}
+
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600&display=swap');
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Sora', sans-serif; background: #fff; color: #1a1a2e; }
+
+  .sigtram-hero {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 3rem;
+    padding: 3rem 2.5rem 2.5rem;
+    align-items: start;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  @keyframes fadeUp  { from { opacity:0; transform:translateY(14px); } to { opacity:1; transform:translateY(0); } }
+  @keyframes fadeLeft{ from { opacity:0; transform:translateX(16px); } to { opacity:1; transform:translateX(0); } }
+
+  .hero-left  { animation: fadeUp   .5s ease .1s both; }
+  .hero-right { animation: fadeLeft .5s ease .2s both; display:flex; flex-direction:column; gap:12px; }
+
+  .sigtram-tag {
+    display: inline-flex; align-items: center;
+    border: 1px solid #c7d7f9; background: #eff4ff; color: #1a56db;
+    font-size: 11px; font-weight: 500; padding: 3px 10px;
+    border-radius: 100px; margin-bottom: 1.2rem;
+    letter-spacing: .04em; text-transform: uppercase;
+  }
+
+  .hero-title { font-size: 2.2rem; font-weight: 600; line-height: 1.2; color: #111827; margin-bottom: 1rem; }
+  .hero-title span { color: #1a56db; }
+
+  .hero-desc { font-size: 14px; line-height: 1.75; color: #4b5563; margin-bottom: 1.8rem; max-width: 440px; }
+
+  .hero-btns { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 2rem; }
+
+  .btn-primary {
+    display: inline-flex; align-items: center; gap: 7px;
+    background: #1a56db; color: #fff; text-decoration: none;
+    font-size: 13px; font-weight: 500; padding: 10px 20px;
+    border-radius: 7px; font-family: 'Sora', sans-serif; transition: background .2s;
+  }
+  .btn-primary:hover { background: #1647bf; }
+
+  .btn-secondary {
+    display: inline-flex; align-items: center; gap: 7px;
+    border: 1px solid #d1d5db; color: #374151; text-decoration: none;
+    font-size: 13px; padding: 10px 20px; border-radius: 7px;
+    font-family: 'Sora', sans-serif; transition: border-color .2s, color .2s;
+  }
+  .btn-secondary:hover { border-color: #1a56db; color: #1a56db; }
+
+  .hero-stats { display: grid; grid-template-columns: repeat(3,1fr); gap: 8px; animation: fadeUp .5s ease .35s both; }
+  .stat-card  { background: #f9fafb; border: 1px solid #e5e7eb; border-radius: 9px; padding: .9rem; text-align: center; }
+  .stat-num   { font-size: 1.6rem; font-weight: 600; color: #1a56db; line-height: 1; }
+  .stat-lbl   { font-size: 10px; color: #6b7280; text-transform: uppercase; letter-spacing: .04em; margin-top: 4px; }
+
+  .info-card { background: #fff; border: 1px solid #e5e7eb; border-radius: 12px; padding: 1.2rem; transition: border-color .2s; }
+  .info-card:hover { border-color: #93c5fd; }
+
+  .card-head { font-size: 13px; font-weight: 500; color: #111827; margin-bottom: 12px; }
+
+  .feature-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .feature-item { display: flex; align-items: flex-start; gap: 8px; font-size: 12px; color: #4b5563; line-height: 1.5; }
+
+  .feature-icon { width: 26px; height: 26px; border-radius: 6px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 1px; }
+  .fi-blue   { background: #eff4ff; }
+  .fi-green  { background: #ecfdf5; }
+  .fi-amber  { background: #fffbeb; }
+  .fi-purple { background: #f5f3ff; }
+
+  .feature-icon svg { width: 14px; height: 14px; }
+  .fi-blue   svg { stroke: #1a56db; }
+  .fi-green  svg { stroke: #059669; }
+  .fi-amber  svg { stroke: #d97706; }
+  .fi-purple svg { stroke: #7c3aed; }
+
+  .card-head-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
+  .ver-todos { font-size: 11px; color: #1a56db; text-decoration: none; }
+  .ver-todos:hover { text-decoration: underline; }
+
+  .tramites-list { display: flex; flex-direction: column; gap: 6px; }
+
+  .tr-item { display: flex; align-items: center; gap: 8px; padding: 7px 10px; background: #f9fafb; border-radius: 7px; border: 1px solid #f3f4f6; }
+  .tr-name { font-size: 12px; color: #374151; flex: 1; }
+  .tr-time { font-size: 11px; color: #9ca3af; }
+
+  .pr-badge  { font-size: 10px; padding: 2px 7px; border-radius: 4px; font-weight: 500; white-space: nowrap; }
+  .pr-alta   { background: #fef2f2; color: #b91c1c; border: 1px solid #fecaca; }
+  .pr-media  { background: #fffbeb; color: #b45309; border: 1px solid #fde68a; }
+  .pr-normal { background: #ecfdf5; color: #065f46; border: 1px solid #a7f3d0; }
+
+  .empty-msg { font-size: 12px; color: #9ca3af; text-align: center; padding: 1rem 0; }
+
+  @media (max-width: 768px) {
+    .sigtram-hero { grid-template-columns: 1fr; gap: 2rem; padding: 2rem 1.2rem; }
+    .hero-title { font-size: 1.7rem; }
+  }
+</style>
+
+<section class="sigtram-hero">
+
+  <!-- Izquierda -->
+  <div class="hero-left">
+    <div class="sigtram-tag">Municipalidad Provincial de Yauyos</div>
+
+    <h1 class="hero-title">
+      Sistema inteligente de<br>
+      <span>gestión de trámites</span>
+    </h1>
+
+    <p class="hero-desc">
+      Plataforma web que usa Machine Learning para priorizar trámites,
+      reducir errores y mejorar la atención ciudadana en la
+      Municipalidad Provincial de Yauyos.
+    </p>
+
+    <div class="hero-btns">
+      <a class="btn-primary" href="/registrar">Registrar trámite</a>
+      <a class="btn-secondary" href="/admin">Panel administrativo</a>
+    </div>
+
+    <div class="hero-stats">
+      <div class="stat-card"><div class="stat-num">98%</div><div class="stat-lbl">Precisión ML</div></div>
+      <div class="stat-card"><div class="stat-num">3×</div><div class="stat-lbl">Más rápido</div></div>
+      <div class="stat-card"><div class="stat-num">24/7</div><div class="stat-lbl">Disponible</div></div>
+    </div>
+  </div>
+
+  <!-- Derecha -->
+  <div class="hero-right">
+
+    <!-- Qué hace el sistema -->
+    <div class="info-card">
+      <div class="card-head">¿Qué hace el sistema?</div>
+      <div class="feature-grid">
+
+        <div class="feature-item">
+          <div class="feature-icon fi-blue">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M9.5 2a2.5 2.5 0 1 1 5 0 2.5 2.5 0 0 1-5 0z"/><path d="M4 13c0-3.3 2.7-6 6-6h4c3.3 0 6 2.7 6 6v1H4v-1z"/><path d="M3 18h18"/><path d="M12 14v4"/>
+            </svg>
+          </div>
+          <span>Clasifica trámites por prioridad automáticamente</span>
+        </div>
+
+        <div class="feature-item">
+          <div class="feature-icon fi-amber">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M3 6h18M7 12h10M11 18h2"/>
+            </svg>
+          </div>
+          <span>Ordena solicitudes críticas primero</span>
+        </div>
+
+        <div class="feature-item">
+          <div class="feature-icon fi-green">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M4 4v5h5"/><path d="M20 20v-5h-5"/><path d="M4 9a9 9 0 0 1 15-3.3M20 15a9 9 0 0 1-15 3.3"/>
+            </svg>
+          </div>
+          <span>Actualiza estados en tiempo real</span>
+        </div>
+
+        <div class="feature-item">
+          <div class="feature-icon fi-purple">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/>
+            </svg>
+          </div>
+          <span>Genera notificaciones internas</span>
+        </div>
+
+        <div class="feature-item">
+          <div class="feature-icon fi-blue">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/>
+            </svg>
+          </div>
+          <span>Reportes para la municipalidad</span>
+        </div>
+
+        <div class="feature-item">
+          <div class="feature-icon fi-green">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+            </svg>
+          </div>
+          <span>Detecta errores en documentos</span>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Trámites recientes -->
+    <div class="info-card">
+      <div class="card-head-row">
+        <div class="card-head" style="margin-bottom:0;">Trámites recientes</div>
+        <a href="/admin" class="ver-todos">Ver todos →</a>
+      </div>
+      <div class="tramites-list">
+        {% for tramite in tramites_recientes %}
+        <div class="tr-item">
+          {% if tramite.prioridad == 'alta' %}
+            <span class="pr-badge pr-alta">Alta</span>
+          {% elif tramite.prioridad == 'media' %}
+            <span class="pr-badge pr-media">Media</span>
+          {% else %}
+            <span class="pr-badge pr-normal">Normal</span>
+          {% endif %}
+          <span class="tr-name">{{ tramite.ciudadano }}</span>
+          <span class="tr-time">{{ tramite.fecha_registro }}</span>
+        </div>
+        {% else %}
+        <p class="empty-msg">No hay trámites recientes.</p>
+        {% endfor %}
+      </div>
+    </div>
+
+  </div>
+</section>
+
+{% endblock %}

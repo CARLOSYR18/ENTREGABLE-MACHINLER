@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="page-header">
+    <h1>Notificaciones del trámite N.º {{ tramite.id }}</h1>
+    <p>Estado actual: <strong>{{ tramite.estado }}</strong></p>
+</div>
+
+<div class="timeline">
+    {% for n in notis %}
+    <div class="timeline-item">
+        <span>{{ n.fecha }}</span>
+        <p>{{ n.mensaje }}</p>
+    </div>
+    {% else %}
+    <p>No hay notificaciones.</p>
+    {% endfor %}
+</div>
+
+<a class="btn secondary" href="/admin">Volver al panel</a>
+{% endblock %}

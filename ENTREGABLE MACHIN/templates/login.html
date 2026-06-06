@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login | NovaNotifi</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body class="login-body">
+<div class="login-page">
+
+  <!-- IZQUIERDA -->
+  <section class="login-left">
+    <div class="login-orb login-orb-1"></div>
+    <div class="login-orb login-orb-2"></div>
+    <div class="login-orb login-orb-3"></div>
+
+    <div class="login-logo">
+      <div class="login-logo-icon">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#1a56db" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
+          <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
+          <circle cx="18" cy="5" r="3" fill="#1a56db" stroke="none"/>
+        </svg>
+      </div>
+      <span class="login-brand">Nova<span>Notifi</span></span>
+    </div>
+
+    <div class="login-hero">
+      <div class="login-tag">
+        <span class="login-tag-dot"></span>
+        Sistema activo
+      </div>
+      <h1>Gestión de trámites <em>inteligente</em></h1>
+      <p>Registra, administra y monitorea solicitudes con notificaciones automáticas según estado y prioridad.</p>
+      <div class="login-pills">
+        <div class="login-pill">
+          <div class="login-pill-icon">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="9" y1="13" x2="15" y2="13"/><line x1="9" y1="17" x2="12" y2="17"/></svg>
+          </div>
+          <div>
+            <b>Registro de trámites</b>
+            <small>Clasificación por prioridad: baja, media, alta, crítica</small>
+          </div>
+        </div>
+        <div class="login-pill">
+          <div class="login-pill-icon">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+          </div>
+          <div>
+            <b>Notificaciones automáticas</b>
+            <small>Alertas en tiempo real por estado</small>
+          </div>
+        </div>
+        <div class="login-pill">
+          <div class="login-pill-icon">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+          </div>
+          <div>
+            <b>Panel administrativo</b>
+            <small>Seguimiento y control centralizado</small>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="login-copyright">© 2025 NovaNotifi · Todos los derechos reservados</div>
+  </section>
+
+  <!-- DERECHA -->
+  <section class="login-right">
+    <div class="login-form-wrap">
+      <div class="login-form-head">
+        <p>Bienvenido de vuelta</p>
+        <h2>Iniciar sesión</h2>
+      </div>
+
+      <form method="POST">
+        <div class="login-field">
+          <label for="email">Correo electrónico</label>
+          <div class="login-input-wrap">
+            <input type="email" id="email" name="email" class="login-input"
+              placeholder="tu@novanotifi.com" autocomplete="email" required>
+            <span class="login-input-icon">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+            </span>
+          </div>
+        </div>
+
+        <div class="login-field">
+          <label for="password">Contraseña</label>
+          <div class="login-input-wrap">
+            <input type="password" id="password" name="password" class="login-input"
+              placeholder="••••••••" autocomplete="current-password" required>
+            <button type="button" class="login-eye" id="eyeBtn" aria-label="Mostrar contraseña">
+              <svg id="eyeIcon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/></svg>
+            </button>
+          </div>
+        </div>
+
+        {% if error %}
+        <div class="login-error">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+          {{ error }}
+        </div>
+        {% endif %}
+
+        <button type="submit" class="login-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>
+          Ingresar al sistema
+        </button>
+      </form>
+
+      <div class="login-divider">
+        <div class="login-divider-line"></div>
+        <span class="login-divider-text">¿nuevo aquí?</span>
+        <div class="login-divider-line"></div>
+      </div>
+
+      <div class="register-link">
+        ¿No tienes cuenta?
+        <a href="{{ url_for('register') }}">Regístrate gratis →</a>
+      </div>
+
+      <div class="login-trust">
+        <div class="login-trust-item">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          Seguro
+        </div>
+        <div class="login-trust-item">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+          Supabase
+        </div>
+        <div class="login-trust-item">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          24/7
+        </div>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<script>
+  const pwd = document.getElementById('password');
+  const btn = document.getElementById('eyeBtn');
+  const ico = document.getElementById('eyeIcon');
+  btn.addEventListener('click', () => {
+    const show = pwd.type === 'password';
+    pwd.type = show ? 'text' : 'password';
+    ico.innerHTML = show
+      ? '<path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-10-8-10-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 10 8 10 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/>'
+      : '<path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/>';
+  });
+</script>
+</body>
+</html>
