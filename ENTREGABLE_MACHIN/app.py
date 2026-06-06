@@ -37,12 +37,8 @@ def enviar_correo(destino, asunto, mensaje):
     remitente = os.getenv("MAIL_EMAIL")
     password = os.getenv("MAIL_PASSWORD")
 
-    print("Intentando enviar correo a:", destino)
-    print("MAIL_EMAIL:", remitente)
-    print("MAIL_PASSWORD existe:", bool(password))
-
     if not remitente or not password:
-        print("Correo no enviado: faltan MAIL_EMAIL o MAIL_PASSWORD en .env")
+        print("Correo no enviado: faltan MAIL_EMAIL o MAIL_PASSWORD")
         return
 
     msg = MIMEText(mensaje, "html", "utf-8")
@@ -75,6 +71,20 @@ def login_required(view):
     def wrapped_view(*args, **kwargs):
         if not session.get("user_email"):
             return redirect(url_for("login", next=request.path))
+        return view(*args, **kwargs)
+
+    return wrapped_view
+
+
+def admin_required(view):
+    @wraps(view)
+    def wrapped_view(*args, **kwargs):
+        if not session.get("user_email"):
+            return redirect(url_for("login"))
+
+        if session.get("rol") != "admin":
+            return redirect(url_for("index"))
+
         return view(*args, **kwargs)
 
     return wrapped_view
@@ -116,7 +126,7 @@ def register():
                 supabase.table("usuarios").insert({
                     "correo": correo,
                     "password": password,
-                    "rol": "admin"
+                    "rol": "usuario"
                 }).execute()
 
                 return redirect(url_for("login"))
@@ -146,7 +156,7 @@ def login():
             if usuario.data:
                 session.clear()
                 session["user_email"] = usuario.data[0]["correo"]
-                session["rol"] = usuario.data[0]["rol"]
+                session["rol"] = usuario.data[0].get("rol", "usuario")
 
                 return redirect(request.args.get("next") or url_for("index"))
 
@@ -164,8 +174,15 @@ def logout():
 @app.route("/")
 @login_required
 def index():
-    tramites_recientes = listar_tramites(None)[:5]
-    return render_template("index.html", tramites_recientes=tramites_recientes)
+    tramites_recientes = []
+
+    if session.get("rol") == "admin":
+        tramites_recientes = listar_tramites(None)[:5]
+
+    return render_template(
+        "index.html",
+        tramites_recientes=tramites_recientes
+    )
 
 
 @app.route("/registrar", methods=["GET", "POST"])
@@ -220,6 +237,7 @@ def registrar():
                     <h2 style="color:#1557c0;">Trámite registrado correctamente</h2>
                     <p>Hola <b>{ciudadano}</b>,</p>
                     <p>Su trámite fue recibido correctamente en el sistema.</p>
+
                     <div style="background:#f8fafc; padding:16px; border-radius:12px; margin:18px 0;">
                         <p><b>Número de solicitud:</b> {tramite_id}</p>
                         <p><b>Tipo de trámite:</b> {tipo_tramite}</p>
@@ -227,6 +245,7 @@ def registrar():
                         <p><b>Estado actual:</b> Recibido</p>
                         <p><b>Prioridad asignada:</b> {prioridad.upper()}</p>
                     </div>
+
                     <p>Le notificaremos por correo cuando el estado de su trámite cambie.</p>
                     <p style="color:#64748b;">Gracias por usar NovaNotifi.</p>
                 </div>
@@ -247,7 +266,7 @@ def resultado(tramite_id):
 
 
 @app.route("/admin")
-@login_required
+@admin_required
 def admin():
     filtro = request.args.get("prioridad", "")
     tramites = listar_tramites(filtro if filtro else None)
@@ -262,7 +281,7 @@ def admin():
 
 
 @app.route("/actualizar_estado/<int:tramite_id>", methods=["POST"])
-@login_required
+@admin_required
 def actualizar_estado(tramite_id):
     nuevo_estado = request.form["estado"]
 
@@ -285,6 +304,7 @@ def actualizar_estado(tramite_id):
                     <h2 style="color:#1557c0;">Actualización de trámite</h2>
                     <p>Hola <b>{tramite["ciudadano"]}</b>,</p>
                     <p>El estado de su trámite ha sido actualizado.</p>
+
                     <div style="background:#f8fafc; padding:16px; border-radius:12px; margin:18px 0;">
                         <p><b>Número de solicitud:</b> {tramite["id"]}</p>
                         <p><b>Tipo de trámite:</b> {tramite["tipo_tramite"]}</p>
@@ -292,6 +312,7 @@ def actualizar_estado(tramite_id):
                         <p><b>Nuevo estado:</b> {nuevo_estado}</p>
                         <p><b>Prioridad:</b> {tramite["prioridad"].upper()}</p>
                     </div>
+
                     <p>Gracias por usar NovaNotifi.</p>
                 </div>
             </div>
@@ -315,7 +336,7 @@ def notificaciones(tramite_id):
 
 
 @app.route("/api/reportes")
-@login_required
+@admin_required
 def api_reportes():
     return jsonify(reporte_por_area())
 

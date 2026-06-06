@@ -24,17 +24,16 @@
             min-height: 100vh;
         }
 
-       .sidebar {
-    width: 280px;
-    min-height: 100vh;
-    background: #0f2d6b;
-    padding: 28px 18px;
-    display: flex;
-    flex-direction: column;
-    flex-shrink: 0;
-}
+        .sidebar {
+            width: 280px;
+            min-height: 100vh;
+            background: #0f2d6b;
+            padding: 28px 18px;
+            display: flex;
+            flex-direction: column;
+            flex-shrink: 0;
+        }
 
-        /* Logo */
         .logo {
             display: flex;
             align-items: center;
@@ -68,7 +67,6 @@
             margin-top: 3px;
         }
 
-        /* Nav */
         nav {
             display: flex;
             flex-direction: column;
@@ -117,7 +115,6 @@
             border-color: rgba(255,255,255,.15);
         }
 
-        /* Cerrar sesión */
         nav a.logout {
             color: rgba(255,160,160,.9);
             background: rgba(220,38,38,.15);
@@ -131,14 +128,12 @@
             transform: translateX(4px);
         }
 
-        /* Divider */
         .sb-divider {
             height: 1px;
             background: rgba(255,255,255,.1);
             margin: 12px 0;
         }
 
-        /* User card */
         .sb-user {
             display: flex;
             align-items: center;
@@ -184,6 +179,7 @@
             font-size: 11px;
             color: rgba(255,255,255,.5);
             margin-top: 2px;
+            text-transform: capitalize;
         }
 
         .sb-user-dot {
@@ -195,36 +191,37 @@
             box-shadow: 0 0 0 2px rgba(34,197,94,.25);
         }
 
-        /* ── MAIN ── */
         .main {
             flex: 1;
             padding: 35px;
             overflow: auto;
         }
 
-        /* ── ANIMATIONS ── */
         @keyframes fadeDown {
             from { opacity: 0; transform: translateY(-8px); }
             to   { opacity: 1; transform: translateY(0); }
         }
+
         @keyframes fadeUp {
             from { opacity: 0; transform: translateY(8px); }
             to   { opacity: 1; transform: translateY(0); }
         }
+
         @keyframes slideIn {
             from { opacity: 0; transform: translateX(-10px); }
             to   { opacity: 1; transform: translateX(0); }
         }
 
-        /* ── RESPONSIVE ── */
         @media (max-width: 900px) {
             .layout { flex-direction: column; }
+
             .sidebar {
                 width: 100%;
                 min-height: auto;
                 height: auto;
                 position: relative;
             }
+
             .main { padding: 20px; }
         }
     </style>
@@ -246,6 +243,7 @@
                           stroke-linecap="round" stroke-linejoin="round"/>
                 </svg>
             </div>
+
             <div class="logo-text">
                 <h2>NovaNotifi</h2>
                 <p>Gestión con ML</p>
@@ -271,6 +269,7 @@
                 Registrar trámite
             </a>
 
+            {% if session.get("rol") == "admin" %}
             <a href="/admin" class="{{ 'active' if request.path == '/admin' else '' }}">
                 <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <rect x="3" y="3" width="7" height="7"/>
@@ -280,6 +279,7 @@
                 </svg>
                 Panel administrativo
             </a>
+            {% endif %}
 
             <div class="sb-divider"></div>
 
@@ -297,16 +297,19 @@
 
         <div class="sb-user">
             <div class="sb-avatar">
-                {{ current_user.nombre[0].upper() if current_user and current_user.nombre else 'U' }}
+                {{ session.get("user_email", "U")[0].upper() }}
             </div>
+
             <div class="sb-user-info">
                 <div class="sb-user-name">
-                    {{ current_user.nombre if current_user and current_user.nombre else 'Usuario' }}
+                    {{ session.get("user_email", "Usuario") }}
                 </div>
+
                 <div class="sb-user-role">
-                    {{ current_user.rol if current_user and current_user.rol else 'Administrador' }}
+                    {{ session.get("rol", "usuario") }}
                 </div>
             </div>
+
             <div class="sb-user-dot" title="En línea"></div>
         </div>
 
