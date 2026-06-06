@@ -4,4 +4,5 @@ pandas==2.2.3
 joblib==1.4.2
 supabase==2.10.0
 python-dotenv==1.0.1
-gunicorn
+gunicorn==22.0.0
+flask-mail==0.10.0
