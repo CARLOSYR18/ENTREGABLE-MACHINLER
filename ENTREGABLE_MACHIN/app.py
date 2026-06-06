@@ -340,6 +340,15 @@ def notificaciones(tramite_id):
 def api_reportes():
     return jsonify(reporte_por_area())
 
+@app.route("/seguimiento")
+@login_required
+def seguimiento():
+    return render_template("seguimiento.html")
 
+
+@app.route("/ayuda")
+@login_required
+def ayuda():
+    return render_template("ayuda.html")
 if __name__ == "__main__":
     app.run(debug=True)
